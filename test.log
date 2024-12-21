@@ -1,0 +1,14 @@
+        speed: 0.5734s/iter; left time: 788885.7235s
+2236it [21:22,  1.74it/s]
+Epoch: 24 cost time: 1282.9290482997894
+926it [03:55,  3.93it/s]
+926it [03:55,  3.93it/s]
+926it [03:55,  3.93it/s]
+926it [03:55,  3.93it/s]
+926it [03:55,  3.93it/s]
+
+926it [03:55,  3.93it/s]
+926it [03:55,  3.93it/s]
+Epoch: 24 | Train Loss: 15.0223540 Vali Loss: 22.9034663 MAE Loss: 1.2699734
+EarlyStopping counter: 10 out of 10
+Early stopping

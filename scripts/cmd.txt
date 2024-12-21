@@ -1,0 +1,6 @@
+sudo -i
+cd /home/tsinghua-01/Projects/Time-LLM/
+conda activate timellm
+nohup bash scripts/test.sh > logs/test.log 2>&1 &
+nohup bash scripts/work.sh > logs/work.log 2>&1 &
+bash scripts/predict.sh
