@@ -11,4 +11,5 @@ dataset/*
 !dataset/Data_desc.json
 !dataset/Data
 !dataset/ETT-small
+!dataset/Stock
 
