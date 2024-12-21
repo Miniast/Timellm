@@ -10,7 +10,7 @@ import transformers
 from layers.StandardNorm import Normalize
 
 transformers.logging.set_verbosity_error()
-MODEL_PATH = '/data/models/Llama-2-7b-hf'
+MODEL_PATH = '/home/data/pretrained_llms/llama2-7b-hf'
 
 class FlattenHead(nn.Module):
     def __init__(self, n_vars, nf, target_window, head_dropout=0):
@@ -163,10 +163,7 @@ class Model(nn.Module):
         for param in self.llm_model.parameters():
             param.requires_grad = False
 
-        if configs.prompt_domain:
-            self.description = configs.content
-        else:
-            self.description = 'The Electricity Transformer Temperature (ETT) is a crucial indicator in the electric power long-term deployment.'
+        self.description = configs.content
 
         self.dropout = nn.Dropout(configs.dropout)
 
