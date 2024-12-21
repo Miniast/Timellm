@@ -4,6 +4,7 @@
 
 checkpoints
 dataset/*
+!dataset/prompt_bank
 !dataset/Train.csv
 !dataset/Val.csv
 !dataset/Test.csv
