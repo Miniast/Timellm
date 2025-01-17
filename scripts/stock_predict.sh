@@ -9,7 +9,7 @@ batch_size=8
 d_model=32
 d_ff=128
 
-accelerate launch --multi_gpu --mixed_precision bf16 --num_processes $num_process --main_process_port $master_port run_stock.py \
+accelerate launch --multi_gpu --mixed_precision bf16 --num_processes $num_process --main_process_port $master_port run_stock_predict.py \
   --seq_len 48 \
   --label_len 24 \
   --pred_len 24 \

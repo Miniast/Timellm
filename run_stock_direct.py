@@ -122,6 +122,8 @@ def main():
 
     model_optim = optim.Adam(trained_parameters, lr=args.learning_rate)
 
+    exit(0)
+
     if args.lradj == 'COS':
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(model_optim, T_max=20, eta_min=1e-8)
     else:
@@ -136,6 +138,8 @@ def main():
 
     if args.use_amp:
         scaler = torch.cuda.amp.GradScaler()
+
+    model.to('cuda:0')
 
     for epoch in range(args.train_epochs):
         iter_count = 0

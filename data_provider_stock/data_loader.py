@@ -32,12 +32,12 @@ class DatasetStock(Dataset):
         df_raw = pd.read_csv(f'{self.root_path}/{self.data_path}')
 
         '''
-            df_raw.columns: ['date', 'open', 'high', 'low', 'close', 'volume']
+            df_raw.columns: ['date', 'open', 'high', 'low', 'close']
             date,open,high,low,close,volume
-            2016-01-04,30.57,30.57,28.63,28.78,70997200
+            2016-01-04,30.57,30.57,28.63,28.78
         '''
 
-        data_cols = df_raw.columns[1:]
+        data_cols = df_raw.columns[1:-1]
         df_data = df_raw[data_cols]
 
         sample_num = df_data.shape[0] - self.seq_len - self.pred_len + 1
