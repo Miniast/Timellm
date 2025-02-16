@@ -23,7 +23,7 @@ for file in files:
     train_seqs = int(seqs * 0.7)
     val_seqs = seqs - train_seqs
     df_train_now = df_now.iloc[:train_seqs * 24, :]
-    df_val_now = df_now.iloc[train_seqs * 24:, :]
+    df_val_now = df_now.iloc[train_seqs * 24:train_seqs * 24 + val_seqs * 24, :]
     dfs_train.append(df_train_now)
     dfs_val.append(df_val_now)
     train_list.append(train_seqs - 7 + train_pos)

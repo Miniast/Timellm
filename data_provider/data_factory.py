@@ -1,6 +1,7 @@
 from data_provider.data_loader import DatasetCapacity
 from torch.utils.data import DataLoader
 
+
 # data_dict = {
 #     'ETTh1': Dataset_ETT_hour,
 #     'ETTh2': Dataset_ETT_hour,
@@ -13,10 +14,8 @@ from torch.utils.data import DataLoader
 # }
 
 
-def data_provider(args, flag):
-    # Data = data_dict.get(args.data, DatasetCapacity)
+def data_provider(args, data_path, flag):
     time_enc = 0 if args.embed != 'timeF' else 1
-    percent = args.percent
     args.freq = '15min'
 
     if flag == 'test':
@@ -32,14 +31,13 @@ def data_provider(args, flag):
 
     data_set = DatasetCapacity(
         root_path=args.root_path,
-        data_path=args.data_path,
+        data_path=data_path,
         flag=flag,
         size=[args.seq_len, args.label_len, args.pred_len],
         features=args.features,
-        target=args.target,
         time_enc=time_enc,
+        scale=args.scale,
         freq=freq,
-        percent=percent
     )
     data_loader = DataLoader(
         data_set,

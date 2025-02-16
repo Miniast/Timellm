@@ -1,9 +1,8 @@
 import argparse
 import torch
-from accelerate import Accelerator, DeepSpeedPlugin
+from accelerate import Accelerator
 from accelerate import DistributedDataParallelKwargs
-from torch import nn, optim
-from torch.optim import lr_scheduler
+from torch import nn
 from tqdm import tqdm
 
 from data_provider_stock.data_factory import data_provider
@@ -16,7 +15,6 @@ import os
 
 os.environ['CURL_CA_BUNDLE'] = ''
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:64"
-
 
 parser = argparse.ArgumentParser(description='Time-LLM')
 
@@ -97,6 +95,7 @@ def load_prompt(prompt_path):
 
     return content
 
+
 def smape(pred, true):
     return torch.mean(torch.abs(pred - true) / (torch.abs(pred) + torch.abs(true) + 1e-6))
 
@@ -139,17 +138,15 @@ def validate(args, accelerator, model, test_data, test_loader, criterion, mae_lo
             loss = criterion(pred, true)
             mae_loss = mae_loss_func(pred, true)
             smape_loss = smape(pred, true)
-            
+
             total_loss.append(loss.item())
             total_mae_loss.append(mae_loss.item())
             total_smape_loss.append(smape_loss.item())
-            
 
     total_loss = np.average(total_loss)
     total_mae_loss = np.average(total_mae_loss)
     total_smape_loss = np.average(total_smape_loss)
     return total_loss, total_mae_loss, total_smape_loss
-
 
 
 def main():
@@ -162,7 +159,6 @@ def main():
     model = TimeLLM.Model(args).float()
     model.load_state_dict(torch.load(model_path, map_location='cpu'))
 
-
     criterion = nn.MSELoss()
     mae_loss = nn.L1Loss()
 
@@ -174,7 +170,8 @@ def main():
     model.eval()
 
     test_data, test_loader = data_provider(args, 'Test.csv', 'test')
-    test_loss, test_mae_loss, test_smape_loss = validate(args, accelerator, model, test_data, test_loader, criterion, mae_loss)
+    test_loss, test_mae_loss, test_smape_loss = validate(args, accelerator, model, test_data, test_loader, criterion,
+                                                         mae_loss)
     if accelerator.is_main_process:
         print(f'Test Loss: {test_loss}, Test MAE Loss: {test_mae_loss}, Test SMAPE Loss: {test_smape_loss}')
 

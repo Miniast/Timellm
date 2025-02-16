@@ -1,7 +1,5 @@
 import os
-import numpy as np
 import pandas as pd
-from sympy.physics.units import percent
 from torch.utils.data import Dataset
 from sklearn.preprocessing import StandardScaler
 from utils.timefeatures import time_features
@@ -11,30 +9,20 @@ import bisect
 
 class DatasetCapacity(Dataset):
     def __init__(
-            self, root_path, flag='train', size=None, features='M', data_path=None, target=None,
-            scale=False, time_enc=0, freq='15min', percent=100
+            self, root_path, flag, size, features, data_path, scale, time_enc, freq
     ):
-        target = ['cpu', 'memory']
-
         self.seq_len = size[0]
         self.label_len = size[1]
         self.pred_len = size[2]
 
         self.features = features
-        self.target = target
         self.scale = scale
         self.time_enc = time_enc
         self.freq = freq
         self.flag = flag
-        self.percent = percent
 
         self.root_path = root_path
-        if flag == 'train':
-            self.data_path = 'Train.csv'
-        elif flag == 'test':
-            self.data_path = 'Test.csv'
-        else:
-            self.data_path = 'Val.csv'
+        self.data_path = data_path
         self.__read_data__()
 
         self.enc_in = self.data.shape[-1]
@@ -81,16 +69,18 @@ class DatasetCapacity(Dataset):
         pos = bisect.bisect_right(self.data_list, index)
         seq_begin = (index + pos * 7) * 24
         seq_end = seq_begin + self.seq_len
-        label_begin = seq_end - self.label_len
-        label_end = label_begin + self.label_len + self.pred_len
+        res_begin = seq_end - self.label_len
+        res_end = res_begin + self.label_len + self.pred_len
 
-        seq_feature = self.data[seq_begin:seq_end].values
-        label_feature = self.data[label_begin:label_end].values
+        # 要求 seq 的全部device相同，在本实验中仅检测 first 和 last 即可
+        assert self.data.iloc[seq_begin]['device'] == self.data.iloc[seq_end - 1]['device']
+
+        seq = self.data[seq_begin:seq_end].values
+        res = self.data[res_begin:res_end].values
         seq_stamp = self.data_stamp[seq_begin:seq_end]
-        label_stamp = self.data_stamp[label_begin:label_end]
-        
+        res_stamp = self.data_stamp[res_begin:res_end]
 
-        return seq_feature, label_feature, seq_stamp, label_stamp
+        return seq, res, seq_stamp, res_stamp
         # feature_id = index // self.tot_len
         # s_begin = index % self.tot_len
         #

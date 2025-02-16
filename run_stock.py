@@ -100,6 +100,7 @@ def load_prompt(prompt_path):
 
     return content
 
+
 def validate(args, accelerator, model, test_data, test_loader, criterion, mae_loss_func):
     total_loss = []
     total_mae_loss = []
@@ -136,7 +137,7 @@ def validate(args, accelerator, model, test_data, test_loader, criterion, mae_lo
 
             loss = criterion(pred, true)
             mae_loss = mae_loss_func(pred, true)
-            
+
             # if loss > 50 or mae_loss > 5:
             #     print('Loss:', loss.item(), 'MAE:', mae_loss.item())
             #     # save batch_x, pred, true as json
@@ -153,7 +154,6 @@ def validate(args, accelerator, model, test_data, test_loader, criterion, mae_lo
     total_mae_loss = np.average(total_mae_loss)
     model.train()
     return total_loss, total_mae_loss
-
 
 
 def main():

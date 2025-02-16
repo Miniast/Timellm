@@ -10,8 +10,12 @@ import transformers
 from layers.StandardNorm import Normalize
 
 transformers.logging.set_verbosity_error()
+# gnode4
 # MODEL_PATH = '/home/data/pretrained_llms/llama2-7b-hf'
-MODEL_PATH = '/data/models/Llama-2-7b-hf'
+
+# gnode6
+MODEL_PATH = '/home/aiseon/storage/public_data/Models/Llama-2-7b-hf'
+
 
 class FlattenHead(nn.Module):
     def __init__(self, n_vars, nf, target_window, head_dropout=0):
